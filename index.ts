@@ -1,5 +1,3 @@
-let obj = {};
-
 enum TamanhoCaneca {
   PEQUENA,
   MEDIA,
@@ -50,8 +48,6 @@ class Caneca {
 }
 
 const canecaDaBlue = new Caneca();
-const canecaDoGremio = new Caneca();
-const canecaDoFlamengo = new Caneca();
 
 canecaDaBlue.cor = "azul";
 canecaDaBlue.tamanho = TamanhoCaneca.GRANDE;
@@ -61,3 +57,80 @@ canecaDaBlue.Encher("Café");
 canecaDaBlue.Encher("Veneno");
 
 console.log(canecaDaBlue.Beber());
+
+type PetProps = {
+  nome: string;
+  especie: string;
+  tamanho: string;
+  sexo: string;
+};
+class Pet {
+  private name: string;
+  private especie: string;
+  private tamanho: string;
+  private sexo: string;
+
+  constructor({ especie, tamanho, sexo, nome }: PetProps) {
+    this.especie = especie;
+    this.name = nome;
+    this.sexo = sexo;
+    this.tamanho = tamanho;
+  }
+
+  Comer() {
+    console.log("Hmmmm comidinha");
+  }
+  Evacuar() {
+    console.log("Me deixa em paz");
+  }
+  Andar() {
+    console.log("Andando");
+  }
+  get nome() {
+    return this.name;
+  }
+  set nome(name: string) {
+    this.name = name;
+  }
+}
+
+const Gato = new Pet({
+  nome: "Bichano",
+  especie: "Gato",
+  sexo: "Masculino",
+  tamanho: "Pequeno",
+});
+
+console.log(Gato.nome);
+Gato.nome = "Peco";
+console.log(Gato.nome);
+
+interface IAluno {
+  dormir: () => string;
+  codar: () => string;
+  estudar: () => string;
+  makeCoffe: (cafe: boolean) => string;
+}
+
+class Aluno implements IAluno {
+  dormir() {
+    return "Sonequinha";
+  }
+  codar() {
+    return "Virando Surfista";
+  }
+  estudar() {
+    return "Aula até amanhecer";
+  }
+  makeCoffe(cafe: boolean) {
+    if (cafe) {
+      return "Que delicia cafézinho";
+    } else {
+      return "No coffe no code";
+    }
+  }
+
+  Procrastinar() {
+    return "To fora codo muito";
+  }
+}
