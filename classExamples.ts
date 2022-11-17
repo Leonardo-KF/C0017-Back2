@@ -4,12 +4,12 @@ enum TamanhoCaneca {
   GRANDE,
 }
 
-type CanecaProps = {
+interface CanecaProps {
   cor: string;
   material: string;
   tamanho: TamanhoCaneca;
   estampa: string;
-};
+}
 
 class Caneca {
   public cor: string;
@@ -133,3 +133,67 @@ class Aluno implements IAluno {
     return "To fora codo muito";
   }
 }
+
+interface IAnimal {
+  correr: () => void;
+  comer: () => void;
+}
+
+interface IAnimalProps {
+  cor: string;
+  especie: string;
+  tamanho: number;
+}
+
+interface ILeao extends IAnimal {
+  rugir: () => void;
+}
+
+class Animal implements IAnimal {
+  private cor: string;
+  private especie: string;
+  private tamanho: number;
+
+  constructor(animalProps: IAnimalProps) {
+    this.cor = animalProps.cor;
+    this.especie = animalProps.especie;
+    this.tamanho = animalProps.tamanho;
+  }
+
+  correr() {
+    console.log("correndo");
+  }
+  comer() {
+    console.log("Comendo");
+  }
+}
+
+class Leao extends Animal implements ILeao {
+  rugir() {
+    console.log("Rugindo");
+  }
+}
+
+interface ILeaoEspecifico extends IAnimalProps {
+  skill: string;
+}
+
+class LeaoEspecifico extends Leao {
+  public skill: string;
+  constructor(animalProps: ILeaoEspecifico) {
+    super(animalProps);
+    this.skill = animalProps.skill;
+  }
+
+  dancar() {
+    console.log("Leão circense");
+  }
+}
+
+const leao1 = new Leao({ cor: "laranja", especie: "lião", tamanho: 20 });
+const alex = new LeaoEspecifico({
+  cor: "Verde",
+  especie: "Liãobaio",
+  tamanho: 30,
+  skill: "Dançarino",
+});
