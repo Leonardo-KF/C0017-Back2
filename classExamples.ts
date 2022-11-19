@@ -197,3 +197,74 @@ const alex = new LeaoEspecifico({
   tamanho: 30,
   skill: "Dançarino",
 });
+
+interface ICaneta {
+  PorcentagemDeTinta: number;
+  cor: string;
+
+  Riscar: () => void;
+}
+
+type CanetaProps = {
+  cor: string;
+  ponta: number;
+};
+
+class Caneta implements ICaneta {
+  PorcentagemDeTinta: number = 100;
+  ponta: number;
+  cor: string;
+
+  constructor(props: CanetaProps) {
+    this.cor = props.cor;
+  }
+
+  Riscar(): void {
+    this.PorcentagemDeTinta = this.PorcentagemDeTinta - 0.5;
+    console.log("Escrevi na cor: " + this.cor);
+    console.log("A tinta atual da caneta agora é: " + this.PorcentagemDeTinta);
+  }
+}
+
+interface ICanetaMultiColorProps {
+  cor: string;
+  ponta: number;
+  cores: string[];
+}
+
+interface ICanetaMultiColor extends ICaneta {
+  cores: string[];
+}
+
+const canetaBic = new Caneta({ cor: "Azul", ponta: 0.7 });
+canetaBic.Riscar();
+
+class CanetaMultiColor extends Caneta implements ICanetaMultiColor {
+  cores: string[];
+  constructor(canetaMultiColorProps: ICanetaMultiColorProps) {
+    super(canetaMultiColorProps);
+    this.cores = canetaMultiColorProps.cores;
+  }
+
+  trocarCor(corSelecionada: string): void {
+    let indice: number = 0;
+    this.cores.map((cor, index) => {
+      if (cor === corSelecionada) {
+        indice = index;
+      }
+    });
+    this.cor = this.cores[indice];
+  }
+}
+
+const canetaMulticorFaberCastell = new CanetaMultiColor({
+  cor: "azul",
+  ponta: 0.7,
+  cores: ["azul", "verde", "vermelho", "amarelo", "rosa"],
+});
+
+canetaMulticorFaberCastell.Riscar();
+canetaMulticorFaberCastell.trocarCor("verde");
+canetaMulticorFaberCastell.Riscar();
+canetaMulticorFaberCastell.trocarCor("rosa");
+canetaMulticorFaberCastell.Riscar();
