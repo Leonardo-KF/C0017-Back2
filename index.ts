@@ -8,8 +8,9 @@ type IPersonagem = {
 };
 
 interface ICT extends IPersonagem {
-  desarmar: () => void;
+ desarmar: () => void;
 }
+
 interface ITR extends IPersonagem {
   armar: () => void;
 }
@@ -24,8 +25,18 @@ interface ICTProps extends IPersonagemProps {
 }
 
 interface ITRProps extends IPersonagemProps {
-  C4: boolean;
+  C4?: boolean | null;
 }
+
+// let renato = new Personagem(200, 50)
+// renato.tomarDano(50)
+
+// vida = 200 - 50 = 150
+// colete = 50 - 6.25 = 43.75
+
+// renato.tomarDano(150)
+
+// vida = 150 - 150 = 0
 
 class Personagem implements IPersonagem {
   private vida: number;
@@ -36,8 +47,12 @@ class Personagem implements IPersonagem {
     this.colete = colete;
   }
   tomarDano(dano: number): void {
-    this.vida = this.vida - dano;
     this.colete = this.colete - dano * 0.125;
+
+    if (this.colete <= 0) {
+      this.vida = this.vida - dano;
+    }
+
     if (this.vida <= 0) {
       this.morrer();
     }
@@ -75,6 +90,8 @@ class Personagem implements IPersonagem {
   }
 }
 
+// let rafael = new CT(200, 50, true)
+
 class CT extends Personagem implements ICT {
   private temKitDeDesarme: boolean;
 
@@ -91,10 +108,12 @@ class CT extends Personagem implements ICT {
   }
 }
 
-class TR extends Personagem implements ITR {
-  private temC4: boolean;
+// let jane = new TR(150, 75, )
 
-  constructor({ vida, colete, C4 }: ITRProps) {
+class TR extends Personagem implements ITR {
+  private temC4: boolean | null;
+
+  constructor({ vida, colete, C4 = false }: ITRProps) {
     super({ vida, colete });
     this.temC4 = C4;
   }
