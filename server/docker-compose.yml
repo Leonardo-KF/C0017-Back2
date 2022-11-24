@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+ database:
+    image: bitnami/postgresql
+    ports: 
+      - '5431:5432'
+    container_name: back-c017
+    restart: always
+    volumes: 
+      - back-c017-disk:/var/lib/postgresql/data
+    environment: 
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: supersenha
+      POSTGRES_DB: backc017
+volumes: 
+  back-c017-disk:
