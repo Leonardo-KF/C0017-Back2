@@ -7,3 +7,5 @@
 # DRY - Dont Repeat Yourself
 
 # DI - Depency Injection
+
+# Repository Pattern
