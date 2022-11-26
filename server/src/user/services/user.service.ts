@@ -28,12 +28,8 @@ export class UserService {
 
   async deleteUserById(userId: string): Promise<boolean> {
     try {
-      const existUser = this.userRepository.deleteUser(userId);
-      if (existUser) {
-        return true;
-      } else {
-        return false;
-      }
+      await this.userRepository.deleteUser(userId);
+      return true;
     } catch (err) {
       console.log(err);
       return false;
