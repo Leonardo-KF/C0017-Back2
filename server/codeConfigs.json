@@ -1,0 +1,85 @@
+{
+  "tabnine.experimentalAutoImports": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnSave": true,
+  "explorer.confirmDelete": false,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "thunder-client.codeSnippetLanguage": "cs-httpclient",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "material-icon-theme.files.associations": {
+    "tsconfig.json": "tune",
+    "*.webpack.js": "webpack",
+    "*.proto": "3d",
+    "ormconfig.json": "database"
+  },
+  "material-icon-theme.activeIconPack": "nest",
+  "[prisma]": {
+    "editor.formatOnSave": true
+  },
+  "typescript.suggest.autoImports": true,
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "bracketPairColorizer.depreciation-notice": false,
+  "files.eol": "\n",
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
+    "*": false,
+    "yaml": true,
+    "plaintext": true,
+    "markdown": false,
+    "javascript": false,
+    "html": true,
+    "csharp": true,
+    "code-runner-output": true,
+    "json": false,
+    "typescriptreact": true,
+    "typescript": false,
+    "css": true,
+    "postcss": true,
+    "dockercompose": false,
+    "prisma": false
+  },
+  "workbench.colorTheme": "Bearded Theme Black & Amethyst",
+  "githubPullRequests.createOnPublishBranch": "never",
+  "material-icon-theme.folders.theme": "specific",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "terminal.integrated.defaultProfile.linux": "",
+  "redhat.telemetry.enabled": true,
+  "xml.server.binary.trustedHashes": [
+    "34f51b1d8c3b85bf8af72502c3a52ca841d11cf76f848be198631e0dd2b7e169",
+    "160c3a783fc8ba5cb4b00a98357069c0c8e34ce8816f4f966cee4c1515baa767"
+  ],
+  "xml.symbols.maxItemsComputed": 25000,
+  "editor.unicodeHighlight.nonBasicASCII": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "editor.largeFileOptimizations": false,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "window.zoomLevel": 3,
+  "editor.fontFamily": "'Fira Code'",
+  "editor.fontLigatures": true
+}
