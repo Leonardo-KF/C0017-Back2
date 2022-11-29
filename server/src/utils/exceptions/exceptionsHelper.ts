@@ -20,7 +20,9 @@ export function HandleException({ message, exception }: Exception) {
     throw new BadRequestException(message ? message : 'Invalid data');
   }
   if (exception === Exceptions.DatabaseException) {
-    throw new InternalServerErrorException('Error in database');
+    throw new InternalServerErrorException(
+      message ? message : 'Error in database',
+    );
   }
   if (exception === Exceptions.UnauthorizedException) {
     throw new UnauthorizedException(
