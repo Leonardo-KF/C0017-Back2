@@ -9,3 +9,8 @@
 # DI - Depency Injection
 
 # Repository Pattern
+
+```
+    OVERFETCHING
+    UNDERFETCHING
+```

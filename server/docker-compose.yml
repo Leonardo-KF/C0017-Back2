@@ -13,5 +13,6 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: supersenha
       POSTGRES_DB: backc017
+
 volumes: 
   back-c017-disk:
