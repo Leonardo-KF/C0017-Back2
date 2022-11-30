@@ -4,23 +4,23 @@ import { UpdateClassroomDto } from './dto/update-classroom.dto';
 
 @Injectable()
 export class ClassroomService {
-  create(createClassroomDto: CreateClassroomDto) {
+  async create(createClassroomDto: CreateClassroomDto) {
     return 'This action adds a new classroom';
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all classroom`;
   }
 
-  findOne(id: number) {
+  async findOne(id: string) {
     return `This action returns a #${id} classroom`;
   }
 
-  update(id: number, updateClassroomDto: UpdateClassroomDto) {
+  async update(id: number, updateClassroomDto: UpdateClassroomDto) {
     return `This action updates a #${id} classroom`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} classroom`;
   }
 }
