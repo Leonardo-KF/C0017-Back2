@@ -5,6 +5,6 @@ export class AttendanceList extends CreateAttendanceListDto {
   id: string;
   startDate: Date;
   endDate: Date;
-  students: IUserEntity[] = [];
+  students: IUserEntity[];
   day: string;
 }

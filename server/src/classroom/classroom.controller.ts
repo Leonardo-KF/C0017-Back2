@@ -35,11 +35,11 @@ export class ClassroomController {
     @Param('id') id: string,
     @Body() updateClassroomDto: UpdateClassroomDto,
   ) {
-    return this.classroomService.update(+id, updateClassroomDto);
+    return this.classroomService.update(id, updateClassroomDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.classroomService.remove(+id);
+    return this.classroomService.remove(id);
   }
 }
