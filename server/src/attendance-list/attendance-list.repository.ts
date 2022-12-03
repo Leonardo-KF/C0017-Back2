@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Exception } from 'src/utils/exceptions/exception';
+import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
 import { UpdateAttendanceListDto } from './dto/update-attendance-list.dto';
 import { AttendanceList } from './entities/attendance-list.entity';
 
@@ -33,19 +35,26 @@ export class AttendanceListRespository {
     id,
     studentsIds,
   }: UpdateAttendanceListDto): Promise<AttendanceList> {
-    return await this.prismaService.attendanceList.update({
-      where: { id: id },
-      data: {
-        students: {
-          connect: studentsIds.map((id) => {
-            return { id: id };
-          }),
+    try {
+      return await this.prismaService.attendanceList.update({
+        where: { id: id },
+        data: {
+          students: {
+            connect: studentsIds.map((id) => {
+              return { id: id };
+            }),
+          },
         },
-      },
-      include: {
-        students: true,
-      },
-    });
+        include: {
+          students: true,
+        },
+      });
+    } catch (err) {
+      throw new Exception(
+        Exceptions.DatabaseException,
+        'userId sended not exist',
+      );
+    }
   }
 
   async allAttendancesLists(): Promise<AttendanceList[]> {

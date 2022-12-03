@@ -1,16 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { ClassroomService } from 'src/classroom/classroom.service';
+import { UserService } from 'src/user/services/user.service';
 import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { AttendanceListRespository } from './attendance-list.repository';
 import { CreateAttendanceListDto } from './dto/create-attendance-list.dto';
 import { UpdateAttendanceListDto } from './dto/update-attendance-list.dto';
 import { AttendanceList } from './entities/attendance-list.entity';
 
 @Injectable()
 export class AttendanceListService {
-  private _attendanceList: AttendanceList[] = [];
-  constructor(private readonly classroomService: ClassroomService) {}
+  constructor(
+    private readonly classroomService: ClassroomService,
+    private readonly attendanceListRepository: AttendanceListRespository,
+  ) {}
+
   async create(
     createAttendanceListDto: CreateAttendanceListDto,
   ): Promise<AttendanceList> {
@@ -30,39 +35,40 @@ export class AttendanceListService {
       day: formatedToday,
     };
 
-    this._attendanceList.push(attendanceToday);
-
-    return Promise.resolve(attendanceToday);
+    return await this.attendanceListRepository.createAttendanceList(
+      attendanceToday,
+    );
   }
 
   async findAll() {
-    return this._attendanceList;
+    return await this.attendanceListRepository.allAttendancesLists();
   }
 
   async findOne(id: string): Promise<AttendanceList> {
-    const findedAttendanceList = this._attendanceList.find(
-      (attendanceList) => attendanceList.id === id,
-    );
+    const findedAttendanceList =
+      await this.attendanceListRepository.attendanceListById(id);
     return findedAttendanceList;
   }
 
-  async update(id: number, updateAttendanceListDto: UpdateAttendanceListDto) {
-    return `This action updates a #${id} attendanceList`;
+  async update(updateAttendanceListDto: UpdateAttendanceListDto) {
+    return await this.attendanceListRepository.updateAttendanceList(
+      updateAttendanceListDto,
+    );
   }
 
   async RegisterOnAttendanceList(
     attendanceListId: string,
     userId: string,
-  ): Promise<string> {
+  ): Promise<AttendanceList> {
     const FindedAttendanceList = await this.findOne(attendanceListId);
     const ActualDate = new Date(Date.now());
     if (ActualDate.getTime() > FindedAttendanceList.endDate.getTime()) {
       throw new Exception(Exceptions.InvalidData, 'Dançou');
     }
-    return 'Chamada concluida';
-  }
 
-  async remove(id: number) {
-    return `This action removes a #${id} attendanceList`;
+    return await this.attendanceListRepository.updateAttendanceList({
+      id: attendanceListId,
+      studentsIds: [userId],
+    });
   }
 }

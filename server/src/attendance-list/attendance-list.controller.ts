@@ -47,15 +47,7 @@ export class AttendanceListController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateAttendanceListDto: UpdateAttendanceListDto,
-  ) {
-    return this.attendanceListService.update(+id, updateAttendanceListDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.attendanceListService.remove(+id);
+  update(@Body() updateAttendanceListDto: UpdateAttendanceListDto) {
+    return this.attendanceListService.update(updateAttendanceListDto);
   }
 }
