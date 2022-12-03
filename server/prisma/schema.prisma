@@ -20,10 +20,10 @@ model User {
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
   attendanceLists    AttendanceList[]
-  ClassroomStudent   Classroom        @relation(fields: [classroomStudentId], references: [id], name: "classroom student")
-  classroomStudentId String
-  ClassroomTeacher   Classroom        @relation(fields: [classroomTeacherId], references: [id])
-  classroomTeacherId String
+  ClassroomStudent   Classroom?       @relation(fields: [classroomStudentId], references: [id], name: "classroom student")
+  classroomStudentId String?
+  ClassroomTeacher   Classroom?       @relation(fields: [classroomTeacherId], references: [id])
+  classroomTeacherId String?
 }
 
 model AttendanceList {
