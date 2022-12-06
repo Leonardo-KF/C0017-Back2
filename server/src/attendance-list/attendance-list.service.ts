@@ -13,6 +13,7 @@ import { AttendanceList } from './entities/attendance-list.entity';
 export class AttendanceListService {
   constructor(
     private readonly classroomService: ClassroomService,
+    private readonly userService: UserService,
     private readonly attendanceListRepository: AttendanceListRespository,
   ) {}
 
@@ -61,11 +62,21 @@ export class AttendanceListService {
     userId: string,
   ): Promise<AttendanceList> {
     const FindedAttendanceList = await this.findOne(attendanceListId);
+    const FindedStudent = await this.userService.getUserById(userId);
+    const FindedClassroom = await this.classroomService.findOne(
+      FindedAttendanceList.classroomId,
+    );
     const ActualDate = new Date(Date.now());
     if (ActualDate.getTime() > FindedAttendanceList.endDate.getTime()) {
       throw new Exception(Exceptions.InvalidData, 'Dançou');
     }
 
+    if (!FindedClassroom.students.includes(FindedStudent)) {
+      throw new Exception(
+        Exceptions.InvalidData,
+        'This student not found in classroom',
+      );
+    }
     return await this.attendanceListRepository.updateAttendanceList({
       id: attendanceListId,
       studentsIds: [userId],

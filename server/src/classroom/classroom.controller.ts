@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { ClassroomService } from './classroom.service';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
@@ -16,30 +17,47 @@ export class ClassroomController {
   constructor(private readonly classroomService: ClassroomService) {}
 
   @Post()
-  create(@Body() createClassroomDto: CreateClassroomDto) {
-    return this.classroomService.create(createClassroomDto);
+  async create(@Body() createClassroomDto: CreateClassroomDto) {
+    try {
+      return this.classroomService.create(createClassroomDto);
+    } catch (err) {
+      HandleException(err);
+    }
   }
 
   @Get()
   findAll() {
-    return this.classroomService.findAll();
+    try {
+      return this.classroomService.findAll();
+    } catch (err) {
+      HandleException(err);
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.classroomService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    try {
+      return this.classroomService.findOne(id);
+    } catch (err) {
+      HandleException(err);
+    }
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateClassroomDto: UpdateClassroomDto,
-  ) {
-    return this.classroomService.update(id, updateClassroomDto);
+  @Patch()
+  async update(@Body() updateClassroomDto: UpdateClassroomDto) {
+    try {
+      return this.classroomService.update(updateClassroomDto);
+    } catch (err) {
+      HandleException(err);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.classroomService.remove(id);
+  async remove(@Param('id') id: string) {
+    try {
+      return await this.classroomService.remove(id);
+    } catch (err) {
+      HandleException(err);
+    }
   }
 }

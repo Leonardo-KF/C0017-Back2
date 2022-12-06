@@ -11,4 +11,8 @@ export class CreateClassroomDto {
   @ApiProperty()
   @IsString()
   subject: string;
+  @ApiProperty()
+  teachersIds?: string[];
+  @ApiProperty()
+  studentsIds?: string[];
 }
