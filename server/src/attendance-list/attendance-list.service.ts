@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { ClassroomService } from 'src/classroom/classroom.service';
-import { UserService } from 'src/user/services/user.service';
 import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
 import { AttendanceListRespository } from './attendance-list.repository';
@@ -13,7 +12,6 @@ import { AttendanceList } from './entities/attendance-list.entity';
 export class AttendanceListService {
   constructor(
     private readonly classroomService: ClassroomService,
-    private readonly userService: UserService,
     private readonly attendanceListRepository: AttendanceListRespository,
   ) {}
 
