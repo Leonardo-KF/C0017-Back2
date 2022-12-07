@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,16 +8,17 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { IHttpResponse } from 'src/utils/httpResponse';
+import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { IUserEntity } from './entities/user.entity';
 import { PartialUserDto } from './services/dto/partialUserInput.dto';
 import { UserDto } from './services/dto/userInput.dto';
 import { UserService } from './services/user.service';
-import { Response } from 'express';
-import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 
 @Controller('user')
-export class UserController {
+@ApiTags('Usuários')
+export default class UserController {
   constructor(private readonly service: UserService) {}
 
   @Get()

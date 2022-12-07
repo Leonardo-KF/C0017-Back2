@@ -62,7 +62,6 @@ export class AttendanceListService {
     userId: string,
   ): Promise<AttendanceList> {
     const FindedAttendanceList = await this.findOne(attendanceListId);
-    const FindedStudent = await this.userService.getUserById(userId);
     const FindedClassroom = await this.classroomService.findOne(
       FindedAttendanceList.classroomId,
     );
@@ -71,12 +70,18 @@ export class AttendanceListService {
       throw new Exception(Exceptions.InvalidData, 'Dançou');
     }
 
-    if (!FindedClassroom.students.includes(FindedStudent)) {
+    const TrackStudents = new Map<string, any>();
+    for (const student of FindedClassroom.students) {
+      TrackStudents.set(student.id, { ...student });
+    }
+
+    if (TrackStudents.get(userId) === undefined) {
       throw new Exception(
         Exceptions.InvalidData,
         'This student not found in classroom',
       );
     }
+
     return await this.attendanceListRepository.updateAttendanceList({
       id: attendanceListId,
       studentsIds: [userId],
