@@ -3,6 +3,7 @@ import { Request, UseGuards } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { IsTeacherAuthorization } from './decorators/is-teacher.decorator';
 import { UserLoginDto } from './dto/user-login-input.dto';
 
 @Controller('Authorization')
@@ -15,10 +16,10 @@ export class AuthController {
     return await this.authService.validateUser(data);
   }
 
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
   @Get()
   @ApiBearerAuth()
   async getUser(@Request() req) {
-    console.log(req);
+    return 'O brabo tem nome';
   }
 }

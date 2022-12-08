@@ -17,8 +17,6 @@ export class AuthService {
   async validateUser({ email, password }: UserLoginDto) {
     const user = await this.userService.findUserByEmail(email);
 
-    console.log(user, password);
-
     const passwordIsValid = await compare(password, user.password);
     if (!passwordIsValid) {
       throw new Exception(Exceptions.UnauthorizedException, 'Invalid password');
@@ -27,7 +25,12 @@ export class AuthService {
     delete user.password;
 
     return {
-      token: this.jwtService.sign(user),
+      token: this.jwtService.sign({
+        email: user.email,
+        id: user.id,
+        name: user.name,
+        role: user.role,
+      }),
       user,
     };
   }
