@@ -5,9 +5,13 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { IsTeacherAuthorization } from 'src/auth/decorators/is-teacher.decorator';
+import { userLogged } from 'src/auth/decorators/user-logged.decorator';
+import { IUserEntity } from 'src/user/entities/user.entity';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { AttendanceListService } from './attendance-list.service';
 import { CreateAttendanceListDto } from './dto/create-attendance-list.dto';
@@ -19,37 +23,60 @@ import { UpdateAttendanceListDto } from './dto/update-attendance-list.dto';
 export class AttendanceListController {
   constructor(private readonly attendanceListService: AttendanceListService) {}
 
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @ApiBearerAuth()
   @Post()
   create(@Body() createAttendanceListDto: CreateAttendanceListDto) {
     return this.attendanceListService.create(createAttendanceListDto);
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Post('registerInAttendanceList')
   async registerInAttendanceList(
-    @Body() { attendanceListId, userId }: RegisterOnAttendanceListDto,
+    @userLogged() userLogged: IUserEntity,
+    @Body() { attendanceListId }: RegisterOnAttendanceListDto,
   ) {
     try {
       return await this.attendanceListService.RegisterOnAttendanceList(
         attendanceListId,
-        userId,
+        userLogged.id,
       );
     } catch (error) {
       HandleException(error);
     }
   }
 
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @ApiBearerAuth()
   @Get()
-  findAll() {
-    return this.attendanceListService.findAll();
+  async findAll() {
+    try {
+      return await this.attendanceListService.findAll();
+    } catch (err) {
+      HandleException(err);
+    }
   }
 
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @ApiBearerAuth()
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.attendanceListService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    try {
+      return await this.attendanceListService.findOne(id);
+    } catch (err) {
+      HandleException(err);
+    }
   }
 
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @ApiBearerAuth()
   @Patch(':id')
-  update(@Body() updateAttendanceListDto: UpdateAttendanceListDto) {
-    return this.attendanceListService.update(updateAttendanceListDto);
+  async update(@Body() updateAttendanceListDto: UpdateAttendanceListDto) {
+    try {
+      return await this.attendanceListService.update(updateAttendanceListDto);
+    } catch (err) {
+      HandleException(err);
+    }
   }
 }

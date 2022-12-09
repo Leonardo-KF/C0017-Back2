@@ -2,8 +2,10 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Request, UseGuards } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { IUserEntity } from 'src/user/entities/user.entity';
 import { AuthService } from './auth.service';
 import { IsTeacherAuthorization } from './decorators/is-teacher.decorator';
+import { userLogged } from './decorators/user-logged.decorator';
 import { UserLoginDto } from './dto/user-login-input.dto';
 
 @Controller('Authorization')
@@ -16,10 +18,10 @@ export class AuthController {
     return await this.authService.validateUser(data);
   }
 
-  @UseGuards(AuthGuard(), IsTeacherAuthorization)
   @Get()
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
   @ApiBearerAuth()
-  async getUser(@Request() req) {
-    return 'O brabo tem nome';
+  async getUser(@userLogged() user: IUserEntity) {
+    return user;
   }
 }

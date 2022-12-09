@@ -21,5 +21,6 @@ import { AuthStrategy } from './auth.strategy';
   ],
   controllers: [AuthController],
   providers: [AuthService, UserService, UserRepository, AuthStrategy],
+  exports: [AuthStrategy, AuthService],
 })
 export class AuthModule {}

@@ -7,9 +7,12 @@ import {
   Patch,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { IsTeacherAuthorization } from 'src/auth/decorators/is-teacher.decorator';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { IUserEntity } from './entities/user.entity';
 import { PartialUserDto } from './services/dto/partialUserInput.dto';
@@ -21,6 +24,8 @@ import { UserService } from './services/user.service';
 export default class UserController {
   constructor(private readonly service: UserService) {}
 
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @ApiBearerAuth()
   @Get()
   async getAllUser(): Promise<IUserEntity[]> {
     return await this.service.getAllUsers();
@@ -37,7 +42,7 @@ export default class UserController {
 
   @Post()
   async createUser(
-    @Body() { cpf, email, password, name, role }: UserDto,
+    @Body() { cpf, email, password, name }: UserDto,
     @Res() response: Response,
   ) {
     try {
@@ -46,7 +51,6 @@ export default class UserController {
         email,
         password,
         name,
-        role,
       });
 
       response.status(201).send(result);
@@ -55,6 +59,8 @@ export default class UserController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @ApiBearerAuth()
   @Patch()
   async updateUser(@Body() userData: PartialUserDto): Promise<IUserEntity> {
     try {
@@ -64,6 +70,8 @@ export default class UserController {
     }
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Delete(':id')
   async deleteUserById(@Param('id') userId: string): Promise<string> {
     const userIsDeleted = await this.service.deleteUserById(userId);

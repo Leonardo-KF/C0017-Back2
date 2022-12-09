@@ -6,9 +6,13 @@ import { AttendanceListRespository } from './attendance-list.repository';
 import { DatabaseModule } from 'src/prisma/database.module';
 import { ClassroomRepository } from 'src/classroom/classrom.repository';
 import { UserRepository } from 'src/user/user.repository';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [
+    DatabaseModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+  ],
   controllers: [AttendanceListController],
   providers: [
     AttendanceListService,

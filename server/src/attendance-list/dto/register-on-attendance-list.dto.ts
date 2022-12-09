@@ -5,7 +5,4 @@ export class RegisterOnAttendanceListDto {
   @ApiProperty()
   @IsString()
   attendanceListId: string;
-  @ApiProperty()
-  @IsString()
-  userId: string;
 }
