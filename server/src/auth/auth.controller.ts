@@ -3,6 +3,7 @@ import { Request, UseGuards } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { IUserEntity } from 'src/user/entities/user.entity';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { AuthService } from './auth.service';
 import { IsTeacherAuthorization } from './decorators/is-teacher.decorator';
 import { userLogged } from './decorators/user-logged.decorator';
@@ -15,7 +16,11 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() data: UserLoginDto) {
-    return await this.authService.validateUser(data);
+    try {
+      return await this.authService.validateUser(data);
+    } catch (error) {
+      HandleException(error);
+    }
   }
 
   @Get()
