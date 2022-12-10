@@ -31,7 +31,8 @@ export default class UserController {
   async getAllUser(): Promise<IUserEntity[]> {
     return await this.service.getAllUsers();
   }
-
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @ApiBearerAuth()
   @Get(':id')
   async getUserById(@Param('id') userId: string): Promise<IUserEntity> {
     try {
