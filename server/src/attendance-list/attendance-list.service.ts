@@ -80,9 +80,13 @@ export class AttendanceListService {
       );
     }
 
-    return await this.attendanceListRepository.updateAttendanceList({
-      id: attendanceListId,
-      studentsIds: [userId],
-    });
+    const dataToReturn =
+      await this.attendanceListRepository.updateAttendanceList({
+        id: attendanceListId,
+        studentsIds: [userId],
+      });
+
+    delete dataToReturn.students;
+    return dataToReturn;
   }
 }
