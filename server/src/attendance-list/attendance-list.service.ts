@@ -24,7 +24,7 @@ export class AttendanceListService {
     const formatedToday =
       Today.slice(8, 10) + '/' + Today.slice(5, 7) + '/' + Today.slice(0, 4);
 
-    const EndDateToAttendance = 2 * 60 * 1000;
+    const EndDateToAttendance = 10 * 60 * 1000;
     const attendanceToday: AttendanceList = {
       ...createAttendanceListDto,
       id: randomUUID(),

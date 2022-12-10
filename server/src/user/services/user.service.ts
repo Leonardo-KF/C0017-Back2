@@ -28,6 +28,12 @@ export class UserService {
   }
 
   async updateUser(userData: PartialUserDto): Promise<IUserEntity> {
+    if (userData.password) {
+      const hashedPassword = await hash(userData.password, 10);
+      const userToUpdate = { ...userData, password: hashedPassword };
+      const updatedUser = await this.userRepository.updateUser(userToUpdate);
+      return updatedUser;
+    }
     const updatedUser = await this.userRepository.updateUser(userData);
     delete updatedUser.password;
     return updatedUser;

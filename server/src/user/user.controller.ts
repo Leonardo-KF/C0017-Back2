@@ -13,6 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { IsTeacherAuthorization } from 'src/auth/decorators/is-teacher.decorator';
+import { userLogged } from 'src/auth/decorators/user-logged.decorator';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { IUserEntity } from './entities/user.entity';
 import { PartialUserDto } from './services/dto/partialUserInput.dto';
@@ -59,12 +60,19 @@ export default class UserController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Patch()
-  async updateUser(@Body() userData: PartialUserDto): Promise<IUserEntity> {
+  async updateUser(
+    @Body() userData: PartialUserDto,
+    @userLogged() user: IUserEntity,
+  ): Promise<IUserEntity> {
     try {
-      return await this.service.updateUser(userData);
+      if (userData.id) {
+        delete userData.id;
+      }
+      const dataToUpdate = { ...userData, id: user.id };
+      return await this.service.updateUser(dataToUpdate);
     } catch (err) {
       HandleException(err);
     }
