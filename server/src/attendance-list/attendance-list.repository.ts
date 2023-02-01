@@ -46,7 +46,7 @@ export class AttendanceListRespository {
   async updateAttendanceList({
     id,
     studentsIds,
-  }: UpdateAttendanceListDto): Promise<Omit<AttendanceList, 'students'>> {
+  }: UpdateAttendanceListDto): Promise<AttendanceList> {
     try {
       return await this.prismaService.attendanceList.update({
         where: { id: id },
@@ -56,6 +56,9 @@ export class AttendanceListRespository {
               return { id: id };
             }),
           },
+        },
+        include: {
+          students: true,
         },
       });
     } catch (err) {
