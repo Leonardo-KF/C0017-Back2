@@ -9,6 +9,18 @@ import { AttendanceList } from './entities/attendance-list.entity';
 export class AttendanceListRespository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async myAttendancesLists(userId: string) {
+    return await this.prismaService.attendanceList.findMany({
+      where: {
+        students: {
+          some: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
+
   async createAttendanceList({
     classroomId,
     day,
@@ -34,7 +46,7 @@ export class AttendanceListRespository {
   async updateAttendanceList({
     id,
     studentsIds,
-  }: UpdateAttendanceListDto): Promise<AttendanceList> {
+  }: UpdateAttendanceListDto): Promise<Omit<AttendanceList, 'students'>> {
     try {
       return await this.prismaService.attendanceList.update({
         where: { id: id },
@@ -44,9 +56,6 @@ export class AttendanceListRespository {
               return { id: id };
             }),
           },
-        },
-        include: {
-          students: true,
         },
       });
     } catch (err) {

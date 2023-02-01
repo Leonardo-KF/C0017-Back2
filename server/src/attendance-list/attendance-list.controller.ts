@@ -23,6 +23,17 @@ import { UpdateAttendanceListDto } from './dto/update-attendance-list.dto';
 export class AttendanceListController {
   constructor(private readonly attendanceListService: AttendanceListService) {}
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @Get('me')
+  async me(@userLogged() userLogged: IUserEntity) {
+    try {
+      return await this.attendanceListService.me(userLogged.id);
+    } catch (error) {
+      HandleException(error);
+    }
+  }
+
   @UseGuards(AuthGuard(), IsTeacherAuthorization)
   @ApiBearerAuth()
   @Post()

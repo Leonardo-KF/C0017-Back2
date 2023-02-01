@@ -15,10 +15,17 @@ export class AttendanceListService {
     private readonly attendanceListRepository: AttendanceListRespository,
   ) {}
 
+  async me(userId: string) {
+    return await this.attendanceListRepository.myAttendancesLists(userId);
+  }
+
   async create(
     createAttendanceListDto: CreateAttendanceListDto,
   ): Promise<AttendanceList> {
-    await this.classroomService.findOne(createAttendanceListDto.classroomId);
+    await this.classroomService.findOne(
+      createAttendanceListDto.classroomId,
+      'teacher',
+    );
 
     const Today = new Date(Date.now()).toISOString().slice(0, 10);
     const formatedToday =
@@ -62,6 +69,7 @@ export class AttendanceListService {
     const FindedAttendanceList = await this.findOne(attendanceListId);
     const FindedClassroom = await this.classroomService.findOne(
       FindedAttendanceList.classroomId,
+      'teacher',
     );
     const ActualDate = new Date(Date.now());
     if (ActualDate.getTime() > FindedAttendanceList.endDate.getTime()) {

@@ -14,7 +14,13 @@ import { IsTeacherAuthorization } from 'src/auth/decorators/is-teacher.decorator
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { ClassroomService } from './classroom.service';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
-import { UpdateClassroomDto } from './dto/update-classroom.dto';
+import {
+  AddStudentClassroomDto,
+  AddTeacherClassroomDto,
+  UpdateClassroomDto,
+} from './dto/update-classroom.dto';
+import { userLogged } from 'src/auth/decorators/user-logged.decorator';
+import { User } from '@prisma/client';
 
 @Controller('classroom')
 @ApiTags('Turmas')
@@ -32,7 +38,7 @@ export class ClassroomController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get()
   async findAll() {
@@ -43,12 +49,12 @@ export class ClassroomController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string, @userLogged() user: User) {
     try {
-      return await this.classroomService.findOne(id);
+      return await this.classroomService.findOne(id, user.role);
     } catch (err) {
       HandleException(err);
     }
@@ -60,6 +66,34 @@ export class ClassroomController {
   async update(@Body() updateClassroomDto: UpdateClassroomDto) {
     try {
       return await this.classroomService.update(updateClassroomDto);
+    } catch (err) {
+      HandleException(err);
+    }
+  }
+
+  @UseGuards(AuthGuard(), IsTeacherAuthorization)
+  @ApiBearerAuth()
+  @Patch('/add-teacher')
+  async addTeacher(@Body() updateClassroomDto: AddTeacherClassroomDto) {
+    try {
+      return await this.classroomService.addTeacher(updateClassroomDto);
+    } catch (err) {
+      HandleException(err);
+    }
+  }
+
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @Patch('/enter-student')
+  async addStudent(
+    @userLogged() user: User,
+    @Body() updateClassroomDto: Omit<AddStudentClassroomDto, 'studentId'>,
+  ) {
+    try {
+      return await this.classroomService.AddStudent({
+        ...updateClassroomDto,
+        studentId: user.id,
+      });
     } catch (err) {
       HandleException(err);
     }

@@ -40,22 +40,46 @@ export class ClassroomRepository {
     }
   }
 
+  async addTeacherInToClassroom(teacherId: string, classroomId: string) {
+    try {
+      return await this.prismaService.classroom.update({
+        where: { id: classroomId },
+        data: {
+          teachers: {
+            connect: { id: teacherId },
+          },
+        },
+        include: this.dataToReturn,
+      });
+    } catch (err) {
+      throw new Exception(Exceptions.DatabaseException, err.message);
+    }
+  }
+  async addStudentInToClassroom(studentId: string, classroomId: string) {
+    try {
+      return await this.prismaService.classroom.update({
+        where: { id: classroomId },
+        data: {
+          students: {
+            connect: { id: studentId },
+          },
+        },
+      });
+    } catch (err) {
+      throw new Exception(Exceptions.DatabaseException, err.message);
+    }
+  }
   async updateClassroom(updateData: UpdateClassroomDto): Promise<Classroom> {
     try {
-      const studentsIds = updateData.studentsIds;
-      const teachersIds = updateData.teachersIds;
-
-      delete updateData.studentsIds;
-      delete updateData.teachersIds;
-
       return await this.prismaService.classroom.update({
         where: { id: updateData.id },
         data: {
+          ...updateData,
           students: {
-            connect: studentsIds?.map((id) => ({ id: id })),
+            connect: updateData.studentsIds?.map((id) => ({ id: id })),
           },
           teachers: {
-            connect: teachersIds?.map((id) => ({ id: id })),
+            connect: updateData.teachersIds?.map((id) => ({ id: id })),
           },
         },
         include: this.dataToReturn,
@@ -77,22 +101,22 @@ export class ClassroomRepository {
     }
   }
 
-  async findClassroomById(id: string): Promise<Classroom> {
+  async findClassroomById(id: string, role: string): Promise<Classroom> {
     try {
       return await this.prismaService.classroom.findUnique({
         where: { id: id },
-        include: this.dataToReturn,
+        include: role === 'teacher' ? this.dataToReturn : null,
       });
     } catch (err) {
       throw new Exception(Exceptions.DatabaseException, err.message);
     }
   }
 
-  async findAllClassrooms(): Promise<Classroom[]> {
+  async findAllClassrooms(): Promise<
+    Omit<Classroom, 'students' | 'teachers' | 'attendances'>[]
+  > {
     try {
-      return await this.prismaService.classroom.findMany({
-        include: this.dataToReturn,
-      });
+      return await this.prismaService.classroom.findMany();
     } catch (err) {
       throw new Exception(Exceptions.DatabaseException, err.message);
     }
